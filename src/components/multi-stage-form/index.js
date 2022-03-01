@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react"
+import { createContext, useEffect, useReducer } from "react"
 
 export const FormContext = createContext()
 export const preventDefault = e => e.preventDefault()
@@ -12,12 +12,12 @@ export function actionCreator(name){
 
 export const formActionCreator = (name) => actionCreator(`form/${name}`) 
 
-export const updateField   =  formActionCreator("updateField")
-export const updateError   =  formActionCreator("updateError")
-export const next          =  formActionCreator("nextPage")
-export const back          =  formActionCreator("backPage")
-export const restart       =  formActionCreator("restart")
-export const reset         =  formActionCreator("reset")
+export const updateField    =  formActionCreator("updateField")
+export const updateError    =  formActionCreator("updateError")
+export const next           =  formActionCreator("nextPage")
+export const back           =  formActionCreator("backPage")
+export const restart        =  formActionCreator("restart")
+export const reset          =  formActionCreator("reset")
 
 export const fieldsReducer  =  (fields, action) => {
     fields[action.payload.name] = action.payload.value 
@@ -32,9 +32,11 @@ export const errorReducer  =  (errors, action)  => {
 }
 
 export const nextReducer   =  (state, action) => {
+    console.log("Inside Reducer")
     const {currentPage, steps} = state 
     if(currentPage < steps) state.currentPage = currentPage + 1
     if(typeof action.payload === "number") state.currentPage = action.payload 
+    console.log({state})
     return state 
 }
 
@@ -56,17 +58,17 @@ export const resetReducer = (state) => {
 
 export function formReducer(state, action){
     switch(action.type){
-        case resetReducer.type:
-            return resetReducer(state, action)
-        case restartReducer.type: 
-            return restartReducer(state, action)
-        case backReducer.type: 
-            return backReducer(state, action)
-        case nextReducer.type: 
-            return nextReducer(state, action)
-        case errorReducer.type: 
+        case reset.type:
+            return {...resetReducer(state, action)}
+        case restart.type: 
+            return {...restartReducer(state, action)}
+        case back.type: 
+            return {...backReducer(state, action)}
+        case next.type: 
+            return {...nextReducer(state, action)}
+        case updateError.type: 
             return {...state, errors: errorReducer(state.errors, action)}
-        case fieldsReducer.type: 
+        case updateField.type: 
             return {...state, fields: fieldsReducer(state.fields, action)}
         default: 
             throw new Error(`No reducers match action type of: ${action.type}`)
@@ -77,6 +79,7 @@ export function formReducer(state, action){
 export default function MultiStageForm(props){
     const initialState = {...FormInitialState, steps: props.steps || 0}
     const [state, dispatch] = useReducer(formReducer, initialState)
+
     const selector = cb => cb(state)
     return (
         <FormContext.Provider value={{dispatch, state, selector}}>

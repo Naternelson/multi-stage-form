@@ -1,11 +1,10 @@
 import './App.css';
 import { Box } from '@mui/material';
+import MainPage from './components/main-page';
 
 function App() {
   return (
-    <Box>
-      Hello World
-    </Box>
+    <MainPage/>
   );
 }
 

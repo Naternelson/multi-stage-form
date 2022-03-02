@@ -1,8 +1,8 @@
-import { createContext, useEffect, useReducer } from "react"
+import { createContext, useReducer } from "react"
 
 export const FormContext = createContext()
 export const preventDefault = e => e.preventDefault()
-export const FormInitialState = {fields: {}, errors: {}, currentPage: 0, steps: 0}
+export const FormInitialState = {fields: {}, errors: {}, currentPage: 0, steps: 0, size: 0}
 
 export function actionCreator(name){
     const fn = (payload) => ({type: name, payload})
@@ -18,6 +18,7 @@ export const next           =  formActionCreator("nextPage")
 export const back           =  formActionCreator("backPage")
 export const restart        =  formActionCreator("restart")
 export const reset          =  formActionCreator("reset")
+export const resize         =  formActionCreator("resize")
 
 export const fieldsReducer  =  (fields, action) => {
     fields[action.payload.name] = action.payload.value 
@@ -56,6 +57,11 @@ export const resetReducer = (state) => {
     return {...FormInitialState, steps: state.steps}
 }
 
+export const resizeReducer = (state, {payload}) => {
+    state.size = payload 
+    return state 
+}
+
 export function formReducer(state, action){
     switch(action.type){
         case reset.type:
@@ -70,6 +76,8 @@ export function formReducer(state, action){
             return {...state, errors: errorReducer(state.errors, action)}
         case updateField.type: 
             return {...state, fields: fieldsReducer(state.fields, action)}
+        case resize.type: 
+            return {...resizeReducer(state, action)}
         default: 
             throw new Error(`No reducers match action type of: ${action.type}`)
     }
@@ -89,3 +97,4 @@ export default function MultiStageForm(props){
     )
 }
 
+MultiStageForm.context = FormContext

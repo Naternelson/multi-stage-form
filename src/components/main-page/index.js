@@ -1,9 +1,11 @@
 import { Box, Button, Paper, Step, StepLabel, Stepper }             from "@mui/material";
-import { useContext, useEffect, useState }                          from "react";
+import { useContext, useEffect, useRef, useState }                  from "react";
 import MultiStageForm, { back, FormContext, next, preventDefault }  from "../multi-stage-form";
 import TitleCard                                                    from "./title-card"
 import {range}                                                      from "lodash"
 import StepOne                                                      from "./step-one";
+import StepTwo from "./step-two";
+import StepWrapper from "./step-wrapper";
 
 export default function MainPage(){
     return (
@@ -15,14 +17,13 @@ export default function MainPage(){
 }
 
 export function SignupForm(){
-    const {selector, dispatch} = useContext(FormContext)
-    
     return (
         <Paper component={"form"} onSubmit={preventDefault} sx={{maxWidth: "300px", mx:'auto'}}>
             <FormStepper/>
-            <Box sx={{p: 2, overflow: "hidden"}}>
-                <StepOne/>
-            </Box>
+            <StepWrapper>
+                <StepOne />
+                <StepTwo />
+            </StepWrapper>
             
             <BottomBar validations={formValidators}/>
         </Paper>
@@ -54,10 +55,6 @@ export function BottomBar({validations}){
     const nextButtonLabel = isLast ? "Complete" : "Next"
 
     useEffect(()=>{
-        console.log({currentPage})
-    }, [currentPage] )
-
-    useEffect(()=>{
         validate(state, validations, currentPage)
             .then(valid => {
                 setReady(valid)})
@@ -75,8 +72,6 @@ export function BottomBar({validations}){
 export async function validate(state, validations, step) {
     return await validations[step](state)
 }
-
-
 
 
 const showError = label => err => {
@@ -109,6 +104,13 @@ export const formValidators = {
         const  std               = standardValidator(fields)(state)
         if     (!std)            return false 
         return state.fields.password === state.fields.passwordConfirmation 
+    }, 
+    1: (state) => {
+        const fields    = "first last gender addressLineOne addressLineTwo city state zip".split(" ")
+        const required  = fields.filter(k => k !== "addressLineTwo")
+        const std       = standardValidator(fields, required)(state)
+        if(!std)          return false 
+        return true 
     }
 }
 

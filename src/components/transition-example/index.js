@@ -44,45 +44,26 @@ export default function Example(){
 
 const Context = createContext()
 export function Carousel(props){
-    const [index, setIndex] = useState(0)
-    const [height, setHeight] = useState(0)
+    const [index, setIndex] = useState(props.index || 0)
+    const [height, setHeight] = useState(props.height || 0)
     const [direction, setDirection] = useState(1)
     const pages = useRef([])
     const ready = useRef(true)
-
+    Object.defineProperties(value)
     const value = {
-        get index(){
-            return index
-        },
-        set index(obj) {
-            setIndex(obj)
-        },
-        get height(){
-            return height 
-        },
-        set height(obj){
-            setHeight(obj)
-        },
-        get pages(){
-            return pages.current
-        },
-        set pages(obj){
-            pages.current = obj
-        },
-        get direction(){
-            return direction
-        },
-        set direction(num) {
-            setDirection(num)
-        },
-        get ready(){
-            return !!ready.current
-        }, 
-        set ready(bool){
-            ready.current = !!bool
-        }
+        get index(){        return index },
+        set index(obj){     setIndex(obj) },
+        get height(){       return height },
+        set height(obj){    setHeight(obj) },
+        get pages(){        return pages.current },
+        set pages(obj){     pages.current = obj },
+        get direction(){    return direction },
+        set direction(num){ setDirection(num) },
+        get ready(){        return !!ready.current }, 
+        set ready(bool){    ready.current = !!bool }
     }
 
+    
     const style = useSpring({
         height
     })

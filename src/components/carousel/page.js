@@ -1,4 +1,5 @@
-import { useCallback, useContext, useEffect, useRef } from "react"
+import { Box } from "@mui/material"
+import { useCallback, useContext, useEffect, useRef, useState } from "react"
 import { animated, useSpringRef, useTransition } from "react-spring"
 import CarouselWrapper from "."
 
@@ -31,14 +32,14 @@ export function CarouselPage({children}){
     // transitions obj
     // the object used to return the transisitons necessary for this component
     // ====================
+    
     const [pageId, setPage] = useState(null)
-    const [transObj, setTransObj] = useState({})
+    const [transObj, setTransObj] = useState(null)
     const transRef = useSpringRef()
     const ctx = useContext(CarouselWrapper.Context)
     const AnimatedBox = animated(Box)
     const boxRef = useRef(null)
-    const transitions = useTransition(ctx.index, transObj)
-
+    const transitions = useTransition(ctx.index, transObj || {})
     
     useEffect(()=>{
         // ====================
@@ -58,20 +59,20 @@ export function CarouselPage({children}){
         //
         // To prevent adverse side effects, the node is unselectable until the transition is complete
         // ====================
-        const transitionObject = useCallback((direction) =>({
+        
+        const transitionObject = (direction) =>({
             ref: transRef,
             keys: null, 
-            key: pageId, 
             enter: [{transform: 'translate3d(0%,0,0)'}, {userSelect: 'auto'}],
             from : {transform:  `translate3d(${Math.sign(direction)*100}%,0,0)`, userSelect: 'none' },
             leave: {transform: `translate3d(${Math.sign(direction)*-100}%,0,0)`, userSelect: 'none' },
             onStart: () => ctx.ready = false,
             onRest: () => ctx.ready = true
-        }), [pageId, ctx.ready])
+        })
 
-        setTransObj(transitionObject(ctx.direction))
+        if(pageId >= 0) setTransObj(transitionObject(ctx.direction))
 
-    }, [ctx.direction])
+    }, [ctx.direction, pageId])
 
     useEffect(()=>{
         // ====================
@@ -90,7 +91,7 @@ export function CarouselPage({children}){
             setPage(id)
             ctx.pages = [...ctx.pages, id]
         }
-        return () => {ctx.pages = ctx.pages.splice(pageId, 1)}
+        return () => ctx.pages = ctx.pages.splice(pageId, 1)
     }, [])
 
 
@@ -100,13 +101,17 @@ export function CarouselPage({children}){
 
         // This effect sets the height to match this node, if this node is featured
         // ====================
-        if(pageId === ctx.index) ctx.height = boxRef.current.scrollHeight
-    }, [pageId, ctx.index])
+        const ready = (pageId === ctx.index) && !!boxRef.current
+        ready && (ctx.height = boxRef.current.scrollHeight)
 
+    }, [pageId, ctx.index, boxRef.current?.scrollHeight])
 
+    const notReady = !transObj || !(pageId >= 0) 
+    if(notReady) return null
     return transitions((style, item) => (
         (item === pageId) && <AnimatedBox ref={boxRef} style={{...style, position: 'absolute', width: '100%'}}>
             {children}
+            {console.log(item)}
         </AnimatedBox>
     ))
 }

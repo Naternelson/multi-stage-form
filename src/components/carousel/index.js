@@ -1,3 +1,4 @@
+import { debounce } from "lodash"
 import { createContext, useRef, useState } from "react"
 import Carousel from "./carousel"
 import { CarouselPage } from "./page"
@@ -48,7 +49,7 @@ export default function CarouselWrapper(props){
         get height(){       return height },
         set height(obj){    setHeight(obj) },
         get pages(){        return pages.current },
-        set pages(obj){     pages.current = obj },
+        set pages(obj){     pages.current = obj }, 
         get direction(){    return direction },
         set direction(num){ setDirection(num) },
         get ready(){        return !!ready.current }, 

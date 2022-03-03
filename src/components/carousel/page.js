@@ -1,12 +1,12 @@
 import { useCallback, useContext, useEffect, useRef } from "react"
 import { animated, useSpringRef, useTransition } from "react-spring"
-import Carousel from "."
+import CarouselWrapper from "."
 
 export function CarouselPage({children}){
     // ====================
     // pageId state
 
-    // This state identifies this node to the carousel
+    // This state identifies this node to the `carousel`
     // If this state matches the index of the Carousel, this node will transition in
 
     // transObj state
@@ -34,7 +34,7 @@ export function CarouselPage({children}){
     const [pageId, setPage] = useState(null)
     const [transObj, setTransObj] = useState({})
     const transRef = useSpringRef()
-    const ctx = useContext(Carousel.Context)
+    const ctx = useContext(CarouselWrapper.Context)
     const AnimatedBox = animated(Box)
     const boxRef = useRef(null)
     const transitions = useTransition(ctx.index, transObj)
@@ -70,7 +70,7 @@ export function CarouselPage({children}){
         }), [pageId, ctx.ready])
 
         setTransObj(transitionObject(ctx.direction))
-        
+
     }, [ctx.direction])
 
     useEffect(()=>{

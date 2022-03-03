@@ -1,11 +1,16 @@
+import { createContext, useRef, useState } from "react"
+import Carousel from "./carousel"
+import { CarouselPage } from "./page"
+import usePageNavigation from "./usePageNavigation"
+
 const Context = createContext()
-export default function Carousel(props){
+export default function CarouselWrapper(props){
     // ====================
-    // A Container to hold a Carousel Effect
+    // A Provider to hold a Carousel Effect
     // The children of this container, if a Carousel Page
     //      with matching index will transform in off container, either right or left.
     //      The transition relys on react-spring to handle the transition
-    // This container itself will transition to accommodate the height of the current featured child
+    // The container itself will transition to accommodate the height of the current featured child
 
     // index State
     // The index state determines which of the child CarouselPage components will transition in.
@@ -30,10 +35,8 @@ export default function Carousel(props){
     // value Object 
     // An object to handle the store provided to the Provider
     // Through this object, the CarouselPage's and hooks can interact with the Carousel state
-    
-    // style Spring
-    // The transition block that handles the height of the container
     // ====================
+    
     const [index, setIndex] = useState(props.index || 0)
     const [height, setHeight] = useState(props.height || 0)
     const [direction, setDirection] = useState(1)
@@ -52,21 +55,16 @@ export default function Carousel(props){
         set ready(bool){    ready.current = !!bool }
     }
 
-    const style = useSpring({height})
 
     return (
         <Context.Provider value={value}>
-            <animated.div style={{...style, overflow: "hidden", willChange: 'height', position: 'relative'}}> 
-                {props.children}
-            </animated.div>
+            {props.children}
         </Context.Provider>
     )
 }
 
-Carousel.Context = Context
-
-const forward = () => ready.current && setIndex((current) => {
-    return (current + 1) < value.pages.length ? current + 1 : 0
-})
-const backward = () => ready.current && setIndex((current) => (current) > 0 ? current - 1 : value.pages.length -1)
+CarouselWrapper.Context = Context
+CarouselWrapper.Carousel = Carousel
+Carousel.Page = CarouselPage
+Carousel.PageNavigation = usePageNavigation
 

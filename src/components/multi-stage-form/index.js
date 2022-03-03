@@ -33,11 +33,9 @@ export const errorReducer  =  (errors, action)  => {
 }
 
 export const nextReducer   =  (state, action) => {
-    console.log("Inside Reducer")
     const {currentPage, steps} = state 
     if(currentPage < steps) state.currentPage = currentPage + 1
     if(typeof action.payload === "number") state.currentPage = action.payload 
-    console.log({state})
     return state 
 }
 

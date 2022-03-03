@@ -1,4 +1,4 @@
-import { Box, Button, Paper, Step, StepLabel, Stepper }             from "@mui/material";
+import { Box, Button, Paper, Slide, Step, StepLabel, Stepper, Switch, Typography }             from "@mui/material";
 import { useContext, useEffect, useRef, useState }                  from "react";
 import MultiStageForm, { back, FormContext, next, preventDefault }  from "../multi-stage-form";
 import TitleCard                                                    from "./title-card"
@@ -6,6 +6,7 @@ import {range}                                                      from "lodash
 import StepOne                                                      from "./step-one";
 import StepTwo from "./step-two";
 import StepWrapper from "./step-wrapper";
+import StepThree from "./step-three";
 
 export default function MainPage(){
     return (
@@ -17,13 +18,20 @@ export default function MainPage(){
 }
 
 export function SignupForm(){
+    const [open, setOpen] = useState(false)
+    const label = { checked: open, onChange: ()=>setOpen(s => !s), inputProps: { 'aria-label': 'Switch demo' } }
     return (
         <Paper component={"form"} onSubmit={preventDefault} sx={{maxWidth: "300px", mx:'auto'}}>
-            <FormStepper/>
+            <Switch {...label}/>
+            <Slide in={open} direction={"right"}>
+                <Typography variant="h2">Hello Motto</Typography>
+            </Slide>
+            {/* <FormStepper/>
             <StepWrapper>
                 <StepOne />
                 <StepTwo />
-            </StepWrapper>
+                <StepThree/>
+            </StepWrapper> */}
             
             <BottomBar validations={formValidators}/>
         </Paper>
@@ -89,11 +97,11 @@ const standardValidator = (pageFields, requiredFields) => {
         requiredFields                          = requiredFields ? requiredFields : pageFields
         const   {fields, errors}                = state
         const   hasErrors                       = pageFields.map(key => errors[key]).some(val => val)
-        if      (hasErrors)                     return false 
-        if      (requiredFields.length === 0)   return true 
-        if      (blankObj(fields))              return false 
+        if      (hasErrors)                       return false 
+        if      (requiredFields.length === 0)     return true 
+        if      (blankObj(fields))                return false 
         const   hasBlank                        = requiredFields.map(key => fields[key]).some(val => !val || val === "")
-        if      (hasBlank)                      return false 
+        if      (hasBlank)                        return false 
         return  true 
     }
 }

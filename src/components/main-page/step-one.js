@@ -40,9 +40,9 @@ export default function StepOne(){
     }
 
 
-    const emailProps                =   { type: 'email', onChange: onChange("email"), id:"email", sx:{mt:4}, onBlur: emailBlur, error: emailError }
-    const passwordProps             =   { id: 'password', type: passwordVisibility ? "text" : "password", onChange: onChange("password"), onBlur: passwordBlur, error: passwordError }
-    const passwordConfirmationProps =   { ...passwordProps, id: 'passwordConfirmation', label: 'Confirm Password', onChange: onChange("passwordConfirmation"),  onBlur: confirmationBlur, error: confirmationError  }
+    const emailProps                =   { value: email, type: 'email', onChange: onChange("email"), id:"email", sx:{mt:4}, onBlur: emailBlur, error: emailError }
+    const passwordProps             =   { value: password, id: 'password', type: passwordVisibility ? "text" : "password", onChange: onChange("password"), onBlur: passwordBlur, error: passwordError }
+    const passwordConfirmationProps =   { ...passwordProps, value: passwordConfirmation, id: 'passwordConfirmation', label: 'Confirm Password', onChange: onChange("passwordConfirmation"),  onBlur: confirmationBlur, error: confirmationError  }
     
     return (
         <Step step={STEP}>
@@ -103,3 +103,5 @@ const pValidator = password => {
 const confirmationValidator = (p, c) => {
     if(p !== c) return "Passwords do not match"
 }
+
+let me = "Password1234"

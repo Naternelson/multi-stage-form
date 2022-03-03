@@ -6,9 +6,9 @@ import { FormContext, preventDefault, updateError, updateField }    from "../mul
 import FormField, { SelectField }                                                    from "../multi-stage-form/form-field";
 import Step                                                         from "./step";
 
-export default function StepTwo(){
+export default function StepThree(){
     const {dispatch, selector} = useContext(FormContext)
-    const STEP = 1
+    const STEP = 2
     const {gender, email} = selector(s=> s.fields)
 
     const onChange = (name) => ({target}) => {

@@ -65,6 +65,6 @@ export default function CarouselWrapper(props){
 
 CarouselWrapper.Context = Context
 CarouselWrapper.Carousel = Carousel
-Carousel.Page = CarouselPage
-Carousel.PageNavigation = usePageNavigation
+CarouselWrapper.Page = CarouselPage
+CarouselWrapper.PageNavigation = usePageNavigation
 

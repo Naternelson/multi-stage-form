@@ -1,5 +1,6 @@
 import { debounce } from "lodash"
 import { createContext, useRef, useState } from "react"
+import { config } from "react-spring"
 import Carousel from "./carousel"
 import { CarouselPage } from "./page"
 import usePageNavigation from "./usePageNavigation"
@@ -39,7 +40,7 @@ export default function CarouselWrapper(props){
     // ====================
     
     const [index, setIndex] = useState(props.index || 0)
-    const [height, setHeight] = useState(props.height || 0)
+    const [height, setHeight] = useState(props.height || 20)
     const [direction, setDirection] = useState(1)
     const pages = useRef([])
     const ready = useRef(true)
@@ -53,7 +54,9 @@ export default function CarouselWrapper(props){
         get direction(){    return direction },
         set direction(num){ setDirection(num) },
         get ready(){        return !!ready.current }, 
-        set ready(bool){    ready.current = !!bool }
+        set ready(bool){    ready.current = !!bool },
+        config: props.config ? config[props.config] : config.stiff
+
     }
 
 

@@ -17,11 +17,13 @@ export default function SampleCarousel(){
 
 function InnerContents(){
     const {navigateBack, navigateForward} = usePageNavigation()
+    const colors = "#5FA619 #244EF2 #F25324".split(" ")
+    const boxProps = (index)=>({sx: {display: "flex", height: `${index * 25 + 25}vh`, bgcolor: colors[index] ,justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row',p: 3}})
     return(
-        <Paper sx={{mt: 6, mx: 'auto', width: "500px"}}>
+        <Paper sx={{mt: 2, mx: 'auto', width: "75%"}}>
             <Carousel>
                 <CarouselPage>
-                    <Box sx={{display: "flex", justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row',p: 3}}>
+                    <Box {...boxProps(0)}>
                         <Typography variant="h1">
                             Page One
                         </Typography>
@@ -31,7 +33,7 @@ function InnerContents(){
                     </Box>
                 </CarouselPage>
                 <CarouselPage>
-                    <Box sx={{display: "flex", justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row',p: 3}}>
+                    <Box {...boxProps(1)}>
                         <Typography variant="h1">
                             Page 2
                         </Typography>
@@ -41,7 +43,7 @@ function InnerContents(){
                     </Box>
                 </CarouselPage>
                 <CarouselPage>
-                    <Box sx={{display: "flex", justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row',p: 3}}>
+                    <Box {...boxProps(2)}>
                         <Typography variant="h1">
                             Page 3
                         </Typography>
@@ -50,8 +52,9 @@ function InnerContents(){
                         </Typography>
                     </Box>
                 </CarouselPage>
+                
             </Carousel>
-            <ButtonGroup>
+            <ButtonGroup fullWidth>
                 <Button onClick={navigateBack} variant="contained">Back</Button>
                 <Button onClick={navigateForward} variant="contained">Forward</Button>
             </ButtonGroup>

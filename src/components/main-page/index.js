@@ -3,7 +3,7 @@ import { useContext, useEffect, useRef, useState }                  from "react"
 import MultiStageForm, { back, FormContext, next, preventDefault }  from "../multi-stage-form";
 import TitleCard                                                    from "./title-card"
 import {range}                                                      from "lodash"
-import StepOne                                                      from "./step-one";
+import StepOne                                                      from "../steps/step-one";
 import StepTwo from "./step-two";
 import StepWrapper from "./step-wrapper";
 import StepThree from "./step-three";

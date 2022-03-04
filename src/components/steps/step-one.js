@@ -2,17 +2,17 @@ import { Email, Visibility, VisibilityOff }                         from "@mui/i
 import { Box, ClickAwayListener, IconButton, Typography }           from "@mui/material";
 import PasswordValidator                                            from "password-validator";
 import { useContext, useState }                                     from "react";
-import { FormContext, preventDefault, updateError, updateField }    from "../multi-stage-form";
-import FormField                                                    from "../multi-stage-form/form-field";
-import Step                                                         from "./step";
+import { FormContext, preventDefault, updateError, updateField }    from "../multi-page-form";
+import FormField                                                    from "../multi-page-form/form-field";
+import Step                                                         from "../main-page/step";
 
 export default function StepOne(){
-    const [passwordVisibility, setPassworVisibility]    = useState(false)
-    const {dispatch, selector}                         = useContext(FormContext)
-    const STEP                                          = 0
+    const [passwordVisibility, setPassworVisibility] = useState(false)
+    const {dispatch, selector} = useContext(FormContext)
+    const STEP = 0
     const {email, password, passwordConfirmation} = selector(s => s.fields)
     const {email: emailError, password: passwordError, passwordConfirmation: confirmationError} = selector(s => s.errors)    
-    const onChange                  =   (name) => ({target}) => {
+    const onChange  =   (name) => ({target}) => {
         dispatch(updateField({name, value: target.value}))
         dispatch(updateError({name}))
     }

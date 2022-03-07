@@ -40,7 +40,7 @@ export default function CarouselWrapper(props){
     // ====================
     
     const [index, setIndex] = useState(props.index || 0)
-    const [height, setHeight] = useState(props.height || 20)
+    const [height, setHeight] = useState(props.height || 0)
     const [direction, setDirection] = useState(1)
     const pages = useRef([])
     const ready = useRef(true)

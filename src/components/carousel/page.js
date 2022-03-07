@@ -1,13 +1,13 @@
 import { Box } from "@mui/material"
 import { useContext, useEffect, useRef, useState } from "react"
-import { animated, config, useSpringRef, useTransition } from "react-spring"
+import { animated, useSpringRef, useTransition } from "react-spring"
 import CarouselWrapper from "."
 
 
 
 
 
-export function CarouselPage({children}){
+export default function CarouselPage({children}){
     // ====================
     // pageId state
 

@@ -1,5 +1,5 @@
 import './App.css';
-import ExampleForm from './components/ms-form/example';
+import ExampleForm from './components/form-with-steps/example';
 
 function App() {
   return (

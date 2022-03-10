@@ -5,7 +5,7 @@ const getBool = (obj, defaultValue = true) => isBool(obj) ? obj : defaultValue
 const isUndefined = obj => obj === undefined
 const isDefined = obj => !isUndefined(obj)
 
-const fieldParams = "id name error helperText type required value disabled pattern placeholder beforeValidations validateOnChange validateOnBlur".split(" ")
+const fieldParams = "id name error pageId helperText type required value disabled pattern placeholder beforeValidations validateOnChange validateOnBlur".split(" ")
 const fieldObj = standardObject(fieldParams)
 
 const slice = {
@@ -14,7 +14,8 @@ const slice = {
         fields: {},
         pages: {},
         form: {
-            index: 0,
+            index: 1,
+            ready: false,
             submitted: false,
             initialized: false 
         },
@@ -27,7 +28,11 @@ const slice = {
         },
         createField: (store, action) => {
             const {id} = action.payload 
-            store.fields[id] = fieldObj(action.payload, {helperText: "", error: false, value: "", validateOnBlur: [], validateOnChange: [], beforeValidations: []})
+            
+            store.fields[id] = fieldObj(action.payload, {
+                helperText: "", error: false, value: "", 
+                validateOnBlur: [], validateOnChange: [], beforeValidations: []
+            })
             return store
         },
         deleteField: (store, action) => {
@@ -90,7 +95,7 @@ const slice = {
             return store
         },
         changePage: (store, action)=>{
-            store.index = action.payload
+            store.form.index = action.payload
             return store
         },
         setPageStatus: (store, action) => {

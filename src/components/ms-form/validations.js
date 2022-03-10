@@ -1,5 +1,8 @@
 // ====================
 // Field Validations
+
+import { startCase } from "lodash"
+
 // ====================
 const emailTest = (string) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(string)
 
@@ -12,7 +15,6 @@ export const passwordValidation = value => {
     if(value.length < 8) return "Password must be at least 8 characters long"
     if(value.length > 32) return "Password should be less than 32 characters"
     const hasLowerCase = /[a-z]+/.test(value)
-    console.log({hasLowerCase})
     if(!hasLowerCase) return "Password should have as least one lowercase letter"
     const hasUpperCase = /([A-Z])+/.test(value)
     if(!hasUpperCase) return "Password should have at least one uppercase letter"
@@ -21,6 +23,10 @@ export const confirmationValidation = (value, field, store) => {
     if(value === "") return false 
     const password = store.fields.password.value
     if(value !== password) return "Passwords do not match"
+}
+
+export const fieldIsRequired = name =>  value => {
+    if(!value || value === "") return `${startCase(name)} is required`
 }
 
 // ====================

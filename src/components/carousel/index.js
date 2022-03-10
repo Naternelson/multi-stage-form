@@ -1,8 +1,7 @@
-import { debounce } from "lodash"
 import { createContext, useRef, useState } from "react"
 import { config } from "react-spring"
 import Carousel from "./carousel"
-import { CarouselPage } from "./page"
+import CarouselPage from "./page"
 import usePageNavigation from "./usePageNavigation"
 
 const Context = createContext()

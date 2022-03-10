@@ -108,14 +108,17 @@ export default function CarouselPage({children}){
 
         // This effect sets the height to match this node, if this node is featured
         // ====================
+
         const ready = (pageId === ctx.index) && !!boxRef.current 
         ready && (ctx.height = boxRef.current.scrollHeight)
-
     }, [pageId, ctx.index, boxRef.current?.scrollHeight])
 
     return transitions((style, item) => (
-        <AnimatedBox ref={boxRef} style={{...style, position: 'absolute', width: '100%', display: (item!==pageId && 'none')}}>
-            {children}
+        <AnimatedBox style={{...style, position: 'absolute', width: '100%', display: (item!==pageId && 'none')}}>
+            <div ref={boxRef}>
+                {children}
+            </div>
+           
         </AnimatedBox>
     ))
 }

@@ -7,21 +7,24 @@ import PageThree from "./page-three";
 import PageTwo from "./page-two";
 
 export default function ExampleForm(){
-    const wrapperProps = {sx: {display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: "100vh"}}
-    const contentProps = {sx: {width: "75%", minWidth: "25%", mx: 'auto', px: 2, py: 1}}
-    const borderBoxProps = {sx:{ py: 1, px: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center'}}
+    const colCenterProps = {display: 'flex', flexDirection: 'column', justifyContent: 'center'}
+    const wrapperProps = {sx: {...colCenterProps, height: "100vh"}}
+    const contentProps = {sx: {...colCenterProps, width: "75%", height: "75%", mx: 'auto', px: 2, py: 1}}
+    const borderBoxProps = {sx:{ py: 1, px: 2, width: "100%", height: "100%"}}
     return (
         <Box {...wrapperProps}>
             <Paper {...contentProps}>
                 <Box sx={{m:2,  border: 1,  borderColor: 'grey.600'}}>
-                    <FormWithPages>
-                        <Box {...borderBoxProps}>
-                            <PageOne/>
-                            <PageTwo/>
-                            <PageThree/>
-                        </Box>
-                        <BottomNavBar last={2}/>
-                    </FormWithPages>
+                    <Box {...borderBoxProps}>
+                        <FormWithPages>
+                            
+                                <PageOne/>
+                                <PageTwo/>
+                                <PageThree/>
+                            
+                            <BottomNavBar last={2}/>
+                        </FormWithPages>
+                    </Box>
                 </Box>
 
             </Paper>
@@ -43,8 +46,8 @@ function BottomNavBar({last}){
         alert("Submitted")
     }
     const isLast = index === last
-    const backProps = {onClick:backHandler, sx:{py: 2, width: "25%", display: index > 0 ? "block" : 'none'}}
-    const nextProps = {onClick: index === last ? submitHandler : nextHandler, sx: {...backProps.sx, display: pageReady ? "block": "none"}, }
+    const backProps = {onClick:backHandler, disabled: (index === 0), sx:{py: 2, width: "25%"}}
+    const nextProps = {onClick: index === last ? submitHandler : nextHandler, disabled: !pageReady, sx:{py: 2, width: "25%"}}
     return <Box sx={{display: 'flex', justifyContent: 'center'}}>
         <Button {...backProps}>Back</Button>
         <Button {...nextProps}>{isLast ? "Submit" : "Next"}</Button>

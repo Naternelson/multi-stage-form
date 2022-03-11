@@ -18,11 +18,9 @@ export default function FormPage({index, children}){
         setId(newId)
         dispatch(actions.createPage({id: newId, index: index || numOfPages, ready: false}))
         log("Complete Page Level", `ID - ${newId}`)
-        // return () => dispatch.actions.deletePage(id)
     },[index, numOfPages])
 
     useEffect(()=>{
-        console.log("Current and Page", currentPage?.id, id, currentPage)
         if(currentPage?.id === id) setShow(true)
         else setShow(false)
     },[currentPage?.id])

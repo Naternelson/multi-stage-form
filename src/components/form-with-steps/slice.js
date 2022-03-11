@@ -14,7 +14,7 @@ const slice = {
         fields: {},
         pages: {},
         form: {
-            index: 1,
+            index: 0,
             ready: false,
             submitted: false,
             initialized: false 

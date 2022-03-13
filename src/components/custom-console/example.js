@@ -16,7 +16,7 @@ const obj = {
 export default function ExampleConsole(){
     const reducer = (state, action) => ({...state, ...action})
     const [store, dispatch] = useReducer(reducer, obj)
-    
+
     return (
             <Box height={"100vh"} sx={{display: 'flex', direction: 'row'}}>
                 <Box sx={{display:'flex', flexDirection: 'column', alignItems:"center", justifyContent: 'center', width: '75vw'}}>

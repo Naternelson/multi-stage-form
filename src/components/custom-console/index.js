@@ -1,5 +1,5 @@
-import { Box, ButtonBase, Collapse, Divider, ThemeProvider, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Box, Button, ButtonBase, Collapse, Divider, Paper, ThemeProvider, Typography, useScrollTrigger } from "@mui/material";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { createTheme } from "@mui/material";
 import { ArrowDropUp, ArrowRight } from "@mui/icons-material";
 import { animated, useSpring } from "react-spring";
@@ -7,10 +7,10 @@ import { animated, useSpring } from "react-spring";
 
 const theme = createTheme({
     palette: {
-        mode: 'light'
+        mode: 'dark'
     },
     typography: {
-        fontSize: 12
+        fontSize: 11
     }
 })
 
@@ -25,38 +25,74 @@ const isArray = obj => {
     return false 
 }
 
-export default function CustomConsole({store, height, title}){
-    const wrapperProps ={sx:{display: 'flex', flexDirection: 'column', height: height || "100vh", flex: 1}}
+const Context = createContext()
+export default function CustomConsole({title}){
+    const [currentStore, setCurrent] = useState(null)
+    const stores = useRef({})
+    const location = useScrollTrigger()
+    
+    const store = stores.current[currentStore] || {}
+    const wrapperProps ={sx:{display: 'flex', borderLeft: "3px double", borderColor: "grey.400", my:2, flexDirection: 'column',flex: 1, justifyContent: 'space-between'}}
     const emptyProps = {sx: {display: !store ? 'flex': 'none', alignItems:"center", justifyContent: 'center', flexDirection: 'column', maxHeight: "100%"}}
-    const consoleProps = {sx: {display: !!store ? 'flex': 'hidden', flexDirection: 'column', mt:5, overflow: 'auto', maxHeight: "100%", pb:2, px:2, borderBottom: 1, borderColor: "grey.400"}}
-    return (
-        <ThemeProvider theme={theme}>
+    const consoleProps = {sx: {display: !!store ? 'flex': 'none', flex: 1, flexDirection: 'column', mt:1, overflow: 'auto', maxHeight: "100%", pb:2, px:2}}
+    const bottomBarProps = {sx:{borderTop: 1, p:1, m:1, borderColor: "grey.400"}}
+
+    useEffect(()=>{
+        stores.current[1] = {
+            fn: (() => {}),
+            hello: 'world',
+            foo: ['bar', 'testing', null, {hello: 'mom'}, [1234,56789]],
+            yeash: ['bar', 'testing', null, {hello: 'mom'}, [1234,56789, "asdjlfkjasd"]],
+            location
+        }
+        stores.current[-1] = {try: 'word'}
+        setCurrent(1)
+    },[])
+    return (            
+        <Context.Provider value={{}}>
             <Box {...wrapperProps}>
                 <Box {...emptyProps}>Nothing to Show!</Box>
-                <Box {...consoleProps}>
-                    <Typography align={"center"} variant={"h5"} mb={5}>{title}</Typography>
-                    {
-                        Object.entries(store).map(([key, value]) => (
-                            <ConsoleRow objectKey={key} key={key} value={value}/>)
-                        )
-                    }
+                <Typography align={"center"} variant={"h5"}>{title}</Typography>
+                
+                    <Box {...consoleProps}>
+                        <Paper sx={{p:1}}>
+                            {
+                                Object.entries(store).map(([key, value]) => (
+                                    <ConsoleRow objectKey={key} key={key} value={value}/>)
+                                )
+                            }
+                            </Paper>
+                    </Box>
+                
+
+                <Box {...bottomBarProps}>
+                    <Button onClick={()=>{setCurrent(c => c * -1)}} fullWidth>
+                        Change
+                    </Button>
                 </Box>
             </Box>
-        </ThemeProvider>
-    
+        </Context.Provider>    
     )
 }
+CustomConsole.Context = Context
 
 function ConsoleRow({objectKey, value}){
+    console.log(typeof value)
     const [open, setOpen] = useState(false)
     const isFn = typeof value === "function"
     const isPrimative = !isObject(value)
-    const titleEnding = isFn ? 
-        `${value.toString()}` : isPrimative ? 
-        `${JSON.stringify(value, null).replaceAll("\n","")}` : isArray(value) && !open ?  
-        "[...]"    : isArray(value) && open ? 
-        "["        : !open ?
-        "{...}"    : "{"
+    const titleEnding = (() => {
+        try{
+            return isFn ? 
+            `${value.toString()}` : isPrimative ? 
+            `${JSON.stringify(value, null).replaceAll("\n","")}` : isArray(value) && !open ?  
+            "[...]"    : isArray(value) && open ? 
+            "["        : !open ?
+            "{...}"    : "{"
+        } catch {
+            return "ERROR"
+        }
+    })()
     const ending = isArray(value) ? "]" : isObject(value) ? "}" : ""
     const toggle = e => !e 
     const [style, api] = useSpring(() => ({ from: {backgroundColor: "rgba(255,255,255,1)"}, to: {backgroundColor: "rgba(255,255,255,0)"}}))
@@ -85,8 +121,8 @@ function ConsoleRow({objectKey, value}){
                         <Box sx={{pl:2}}>
                             {isObject(value) && Object.entries(value).map(([key, value]) => <ConsoleRow objectKey={key} key={key} value={value}/>)}
                         </Box>
-                    <Typography sx={{pl: 3, color: 'grey.400'}}>{`${ending}`}</Typography>
                     </Box>
+                    <Typography sx={{pl: 3, color: 'grey.400'}}>{`${ending}`}</Typography>
                 </Collapse>
             </Box>
         </animated.div>            
